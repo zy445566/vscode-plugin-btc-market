@@ -1,0 +1,131 @@
+{
+  "name": "vscode-plugin-btc-market",
+  "displayName": "%extension.btc.market.displayName%",
+  "description": "%extension.btc.market.description%",
+  "version": "1.0.0",
+  "publisher": "swimming",
+  "icon": "btc128.png",
+  "engines": {
+    "vscode": "^1.45.1"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onView:BtcMarkerBarView",
+    "onCommand:extension.btc.market.addTrade"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "%extension.btc.market.btcMarketConfig%",
+      "properties": {
+        "vscodePluginBtcMarket.apiHost": {
+          "type": "string",
+          "default": "huobi.pr",
+          "description": "%extension.btc.market.requestHost%"
+        },
+        "vscodePluginBtcMarket.autoRefreshTime": {
+          "type": "number",
+          "default": 10,
+          "description": "%extension.btc.market.autoRefreshTime%"
+        },
+        "vscodePluginBtcMarket.symbol": {
+          "type": "array",
+          "default": [
+            "btcusdt",
+            "ethusdt"
+          ],
+          "description": "%extension.btc.market.blockCoinExchangeSymbol%"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "BtcMarkerBar",
+          "title": "BTC Marker Bar",
+          "icon": "btc128.svg"
+        }
+      ]
+    },
+    "views": {
+      "BtcMarkerBar": [
+        {
+          "id": "BtcMarkerBarView",
+          "name": "BtcMarkerBarView"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "extension.btc.market.addTrade",
+        "title": "%extension.btc.market.addTrade%"
+      },
+      {
+        "command": "extension.btc.market.delTrade",
+        "title": "%extension.btc.market.delTrade%"
+      },
+      {
+        "command": "extension.btc.market.tradeDetail",
+        "title": "%extension.btc.market.tradeDetail%"
+      },
+      {
+        "command": "extension.btc.market.refresh",
+        "title": "%extension.btc.market.refresh%"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "extension.btc.market.addTrade",
+          "group": "navigation"
+        },
+        {
+          "command": "extension.btc.market.refresh",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "extension.btc.market.tradeDetail",
+          "group": "inline"
+        },
+        {
+          "command": "extension.btc.market.delTrade",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vsce:publish": "npx vsce package && npx vsce publish"
+  },
+  "repository": {
+    "url": "https://github.com/zy445566/vscode-plugin-btc-market"
+  },
+  "keywords": [
+    "btc",
+    "BTC",
+    "market"
+  ],
+  "author": "zy445566",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zy445566/vscode-plugin-btc-market/issues"
+  },
+  "homepage": "https://github.com/zy445566/vscode-plugin-btc-market#readme",
+  "devDependencies": {
+    "@types/node": "^14.0.5",
+    "@types/vscode": "^1.45.1",
+    "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "@types/bent": "^7.3.2",
+    "bent": "^7.3.12"
+  }
+}

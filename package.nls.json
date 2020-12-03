@@ -1,0 +1,13 @@
+{
+    "extension.btc.market.displayName":"BTC market",
+    "extension.btc.market.description":"BTC market vscode plugins",
+    "extension.btc.market.addTrade":"addTrade",
+    "extension.btc.market.delTrade":"delTrade",
+    "extension.btc.market.tradeDetail":"tradeDetail",
+    "extension.btc.market.refresh":"refresh",
+    "extension.btc.market.blockCoinExchangeSymbol":"Block Coin Exchange Symbol,such as (btcusdt,ethusdt...)",
+    "extension.btc.market.requestHost":"Request Host(default: huobi.pr )",
+    "extension.btc.market.autoRefreshTime":"Auto Refresh Time (seconds)",
+    "extension.btc.market.btcMarketConfig":"BTCMarketConfig",
+    "extension.btc.market.inputBlockCoinExchangeSymbol":"input Block Coin Exchange Symbol,please.such as (btcusdt,ethusdt...)"
+}
