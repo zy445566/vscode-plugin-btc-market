@@ -52,8 +52,6 @@ type SymbolInfo = {
 let symbolsKeyList:Array<vscode.QuickPickItem> = [];
 
 async function addTrade(
-    _textEditor: vscode.TextEditor,
-    _edit: vscode.TextEditorEdit,
     ..._args: any[]
 ) {
     if(symbolsKeyList.length<1) {
@@ -92,24 +90,21 @@ async function addTrade(
 }
 
 async function delTrade(
-    _textEditor: vscode.TextEditor,
-    _edit: vscode.TextEditorEdit,
-    ..._args: any[]
+    ...args: any[]
 ) {
     const symbolsConfig = getconfigSymbol();
-    symbolsConfig.splice(symbolsConfig.indexOf(_args[0].label),1);
+    symbolsConfig.splice(symbolsConfig.indexOf(args[0].label),1);
     await setconfigSymbol(symbolsConfig)
     btcMarkerBarViewProvider.refresh();
 }
 
 async function tradeDetail(
-    _textEditor: vscode.TextEditor,
-    _edit: vscode.TextEditorEdit,
-    ..._args: any[]
+    ...args: any[]
 ) {
+    console.log(args)
     const panel = vscode.window.createWebviewPanel(
         'myWebview', // viewType
-        _args[0].label, // 视图标题
+        args[0].label, // 视图标题
         vscode.ViewColumn.One, // 显示在编辑器的哪个部位
         {
             enableScripts: true, // 启用JS，默认禁用
@@ -121,15 +116,12 @@ async function tradeDetail(
     const resp = await getBuffer(`https://www.${
         getApiHost()
     }/${locale}/exchange/${
-        _args[0].label.symbol.replace('/','_')
-    }`);
-    // console.log(`https://www.${getApiHost()}/${locale}/exchange/${_args[0].label.symbol.replace('/','_')}`)
+        args[0].label.replace('/','_')
+    }/`);
     panel.webview.html = resp.toString()
 }
 
 async function refresh(
-    _textEditor: vscode.TextEditor,
-    _edit: vscode.TextEditorEdit,
     ..._args: any[]
 ) {
     btcMarkerBarViewProvider.refresh()
@@ -157,7 +149,7 @@ export function activate(context: vscode.ExtensionContext) {
     ];
     context.subscriptions.push(
         ...textEditorCommandMap.map(({ command, callback }) => {
-            return vscode.commands.registerTextEditorCommand(command, callback);
+            return vscode.commands.registerCommand(command, callback);
         })
     );
 }
