@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as bent from 'bent';
 import { localize } from './localize';
 
+const loadingMap = new Map<string,ExchangeSymbol>();
 export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<ExchangeSymbol> {
   constructor(private apiHost: string) {
     this.apiHost = apiHost;
@@ -10,7 +11,7 @@ export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<Exchang
   readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
   
   public refresh(): any {
-		this._onDidChangeTreeData.fire(undefined);
+    this._onDidChangeTreeData.fire(undefined);
   }
   
   getTreeItem(element: ExchangeSymbol): vscode.TreeItem {
@@ -21,22 +22,23 @@ export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<Exchang
     return await this.loadExchangeSymbolData();
   }
   private async loadExchangeSymbolData():Promise<Array<ExchangeSymbol>> {
-    const getJSON = bent('json')
     const symbolList = vscode.workspace
     .getConfiguration()
     .get<Array<string>>('vscodePluginBtcMarket.symbol') || [];
     // const symbolList = ['btc/usdt']
     const exchangeSymbolList:Array<ExchangeSymbol> = [];
     for(const symbol of symbolList) {
-        const resp = await getJSON(`https://api.${
-          this.apiHost
-        }/market/history/kline?period=1day&size=1&symbol=${
-          symbol.replace('/','')
-        }`);
-        exchangeSymbolList.push(
-            new ExchangeSymbol(symbol, resp.data[0],vscode.TreeItemCollapsibleState.None) //vscode.TreeItemCollapsibleState.Collapsed
-        )
-        
+      let exchangeSymbol = new ExchangeSymbol(symbol, this.apiHost,vscode.TreeItemCollapsibleState.None) //vscode.TreeItemCollapsibleState.Collapsed
+      if(loadingMap.has(symbol)) {
+        exchangeSymbol = loadingMap.get(symbol) || new ExchangeSymbol(symbol, this.apiHost,vscode.TreeItemCollapsibleState.None);
+      } 
+      // 此处是故意不加await的
+      exchangeSymbol.Loading();
+      exchangeSymbolList.push(exchangeSymbol)
+    }
+    loadingMap.clear();
+    for(const exchangeSymbol of exchangeSymbolList) {
+      loadingMap.set(exchangeSymbol.label,exchangeSymbol)
     }
     return exchangeSymbolList;
   }
@@ -50,10 +52,27 @@ type PriceData = {
 class ExchangeSymbol extends vscode.TreeItem {
   constructor(
     public readonly label: string,
-    public readonly priceData: PriceData,
+    public readonly apiHost: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState
   ) {
     super(label, collapsibleState);
+    this.apiHost = apiHost;
+    this.tooltip = `${this.label} ${localize(
+      'extension.btc.market.loading'
+    )}`;
+    this.description = `${localize(
+      'extension.btc.market.loading'
+    )}`;
+  }
+
+  async Loading() {
+    const getJSON = bent('json')
+    const resp = await getJSON(`https://api.${
+        this.apiHost
+      }/market/history/kline?period=1day&size=1&symbol=${
+        this.label.replace('/','')
+      }`);
+    const priceData:PriceData = resp.data[0];
     this.tooltip = `${this.label} ${localize(
       'extension.btc.market.high'
       )}:${priceData.high} ${localize(

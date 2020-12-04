@@ -8,13 +8,17 @@ export function localize(key:string):string {
     messages.set('en',en);
     en.set("extension.btc.market.inputBlockCoinExchangeSymbol",
     "input Block Coin Exchange Symbol,please.such as (btc/usdt,eth/usdt...)")
+    en.set("extension.btc.market.blockCoinExchangeSymbolIsExist","Block Coin Exchange Symbol Already Exist");
     en.set("extension.btc.market.high","high");
     en.set("extension.btc.market.low","low");
+    en.set("extension.btc.market.loading","loading");
     const zh = new Map<string,string>();
     messages.set('zh',zh);
     zh.set("extension.btc.market.inputBlockCoinExchangeSymbol",
     "请输入区块币交易标识,类似于(btc/usdt,eth/usdt...)")
     zh.set("extension.btc.market.high","高");
     zh.set("extension.btc.market.low","低");
+    zh.set("extension.btc.market.blockCoinExchangeSymbolIsExist","区块币交易标识已经存在");
+    zh.set("extension.btc.market.loading","加载中");
     return messages.get(locale)?.get(key) || '';
   }

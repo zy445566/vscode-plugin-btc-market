@@ -57,17 +57,17 @@ let symbolsKeyList:Array<vscode.QuickPickItem> = [];
 async function addTrade(
     ..._args: any[]
 ) {
-    if(symbolsKeyList.length<1) {
-        const getJSON = bent('json')
-        const resp = await getJSON(`https://api.${getApiHost()}/v1/common/symbols`);
-        symbolsKeyList = resp.data.map((symbolInfo:SymbolInfo)=> {
-            return {label:`${symbolInfo["base-currency"]}/${symbolInfo["quote-currency"]}`};
-        })
-    }
     const qp = vscode.window.createQuickPick();
     qp.items = [{ label: localize('extension.btc.market.inputBlockCoinExchangeSymbol') }];
-    qp.onDidChangeValue((value) => {
+    qp.onDidChangeValue(async (value) => {
         qp.busy = true;
+        if(symbolsKeyList.length<1) {
+            const getJSON = bent('json')
+            const resp = await getJSON(`https://api.${getApiHost()}/v1/common/symbols`);
+            symbolsKeyList = resp.data.map((symbolInfo:SymbolInfo)=> {
+                return {label:`${symbolInfo["base-currency"]}/${symbolInfo["quote-currency"]}`};
+            })
+        }
         qp.items = symbolsKeyList.filter(symbolsKey=>symbolsKey.label.indexOf(value)>-1);
         qp.busy = false;
       });
@@ -84,6 +84,11 @@ async function addTrade(
             return;
         }
         const symbolsConfig = getconfigSymbol();
+        if(symbolsConfig.indexOf(nowSymbol)>-1) {
+            return vscode.window.showInformationMessage(
+                localize("extension.btc.market.blockCoinExchangeSymbolIsExist")
+            )
+        }
         symbolsConfig.push(nowSymbol);
         await setconfigSymbol(symbolsConfig)
         btcMarkerBarViewProvider.refresh();
