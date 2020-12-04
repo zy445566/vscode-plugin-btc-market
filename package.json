@@ -2,7 +2,7 @@
   "name": "vscode-plugin-btc-market",
   "displayName": "BTC market",
   "description": "%extension.btc.market.description%",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "swimming",
   "icon": "btc128.png",
   "engines": {
@@ -114,7 +114,8 @@
   "keywords": [
     "btc",
     "BTC",
-    "market"
+    "market",
+    "huobi"
   ],
   "author": "zy445566",
   "license": "MIT",
@@ -129,6 +130,7 @@
   },
   "dependencies": {
     "@types/bent": "^7.3.2",
-    "bent": "^7.3.12"
+    "bent": "^7.3.12",
+    "moment": "^2.29.1"
   }
 }

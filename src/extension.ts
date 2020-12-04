@@ -2,6 +2,9 @@ import * as vscode from 'vscode';
 import { BtcMarkerBarViewProvider } from './btcMarkerBarViewProvider';
 import { localize } from './localize';
 import * as bent from 'bent';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as moment from 'moment';
 
 function getApiHost() {
     return vscode.workspace
@@ -98,10 +101,11 @@ async function delTrade(
     btcMarkerBarViewProvider.refresh();
 }
 
+let extensionPath = ''
+
 async function tradeDetail(
     ...args: any[]
 ) {
-    console.log(args)
     const panel = vscode.window.createWebviewPanel(
         'myWebview', // viewType
         args[0].label, // 视图标题
@@ -111,14 +115,34 @@ async function tradeDetail(
             retainContextWhenHidden: true, // webview被隐藏时保持状态，避免被重置
         }
     );
-    const getBuffer = bent('buffer')
-    let locale:string = JSON.parse(process.env.VSCODE_NLS_CONFIG || '{"locale":"en"}').locale;
-    const resp = await getBuffer(`https://www.${
-        getApiHost()
-    }/${locale}/exchange/${
-        args[0].label.replace('/','_')
-    }/`);
-    panel.webview.html = resp.toString()
+    const klineHtmlDiskPath = path.join(extensionPath, 'static', 'kline.html');
+    const echartsLibDiskPath = vscode.Uri.file(
+        path.join(extensionPath, 'static', 'echarts.min.js')
+    );
+    const echartsLibSrc = panel.webview.asWebviewUri(echartsLibDiskPath);
+    let klineHtml = fs.readFileSync(klineHtmlDiskPath).toString();
+    const getJSON = bent('json');
+    const resp = await getJSON(`https://api.${
+          getApiHost()
+        }/market/history/kline?period=1day&size=200&symbol=${
+            args[0].label.replace('/','')
+        }`);
+    const volumes = [];
+    const lineData = [];
+    const dates = [];
+    const nowData = moment();
+    for(const data of resp.data) {
+        lineData.unshift([data.close,data.open,data.low,data.high])
+        dates.unshift(nowData.format('YYYY-MM-DD'));
+        volumes.unshift(data.vol)
+        nowData.subtract(1,'days');
+    }
+    klineHtml = klineHtml.replace('%ECHARTS_LIB_SRC%', `${echartsLibSrc}`);
+    klineHtml = klineHtml.replace('%LABEL_NAME%', args[0].label);
+    klineHtml = klineHtml.replace('"%LINE_DATA%"', JSON.stringify(lineData));
+    klineHtml = klineHtml.replace('"%DATES%"', JSON.stringify(dates));
+    klineHtml = klineHtml.replace('"%VOLUMES%"', JSON.stringify(volumes));
+    panel.webview.html = klineHtml;
 }
 
 async function refresh(
@@ -128,6 +152,7 @@ async function refresh(
 }
 
 export function activate(context: vscode.ExtensionContext) {
+    extensionPath = context.extensionPath;
     vscode.window.registerTreeDataProvider('BtcMarkerBarView', btcMarkerBarViewProvider);
     const textEditorCommandMap = [
         {
