@@ -5,7 +5,7 @@
     "extension.btc.market.delTrade":"delTrade",
     "extension.btc.market.tradeDetail":"tradeDetail",
     "extension.btc.market.refresh":"refresh",
-    "extension.btc.market.blockCoinExchangeSymbol":"Block Coin Exchange Symbol,such as (btcusdt,ethusdt...)",
+    "extension.btc.market.blockCoinExchangeSymbol":"Block Coin Exchange Symbol,such as (btc/usdt,eth/usdt...)",
     "extension.btc.market.requestHost":"Request Host(default: huobi.pr )",
     "extension.btc.market.autoRefreshTime":"Auto Refresh Time (seconds)",
     "extension.btc.market.btcMarketConfig":"BTCMarketConfig"

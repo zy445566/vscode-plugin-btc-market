@@ -5,7 +5,7 @@ BTC market vscode plugins
 |  name   | type  | default  |
 |  ----  | ----  | ----  |
 | vscodePluginBtcMarket.apiHost  | string | huobi.pr |
-| vscodePluginBtcMarket.symbol  | array | ["btcusdt","ethusdt"] |
+| vscodePluginBtcMarket.symbol  | array | ["btc/usdt","eth/usdt"] |
 | vscodePluginBtcMarket.autoRefreshTime  | number | 10 (s)|
 
 # code repo

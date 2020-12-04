@@ -8,23 +8,28 @@ function getApiHost() {
     .getConfiguration()
     .get<string>('vscodePluginBtcMarket.apiHost') || 'huobi.pr';
 }
+
 function getautoRefreshTime() {
     return vscode.workspace
     .getConfiguration()
     .get<number>('vscodePluginBtcMarket.autoRefreshTime') || 10;
 }
+
 function getconfigSymbol() {
     return vscode.workspace
     .getConfiguration()
     .get<Array<string>>('vscodePluginBtcMarket.symbol') || [];
 }
+
 async function setconfigSymbol(symbolsConfig:Array<string>) {
     return await vscode.workspace.getConfiguration().update(
         'vscodePluginBtcMarket.symbol',
         symbolsConfig
     );
 }
+
 let autoRefreshTime = getautoRefreshTime();
+
 function autoRefreshTimeFunction() {
     const setIntervalHandle = setInterval(()=>{
         if(autoRefreshTime!==getautoRefreshTime()) {
@@ -34,14 +39,18 @@ function autoRefreshTimeFunction() {
         btcMarkerBarViewProvider.refresh()
     },autoRefreshTime*1000)
 }
+
 autoRefreshTimeFunction();
 
 const btcMarkerBarViewProvider = new BtcMarkerBarViewProvider(getApiHost());
+
 type SymbolInfo = {
     "base-currency":String,
     "quote-currency":String,
 }
+
 let symbolsKeyList:Array<vscode.QuickPickItem> = [];
+
 async function addTrade(
     _textEditor: vscode.TextEditor,
     _edit: vscode.TextEditorEdit,
@@ -51,7 +60,7 @@ async function addTrade(
         const getJSON = bent('json')
         const resp = await getJSON(`https://api.${getApiHost()}/v1/common/symbols`);
         symbolsKeyList = resp.data.map((symbolInfo:SymbolInfo)=> {
-            return {label:`${symbolInfo["base-currency"]}${symbolInfo["quote-currency"]}`};
+            return {label:`${symbolInfo["base-currency"]}/${symbolInfo["quote-currency"]}`};
         })
     }
     const qp = vscode.window.createQuickPick();
@@ -70,7 +79,7 @@ async function addTrade(
         if (!nowSymbol) {
             return;
         }
-        if(!/^[a-z0-9]+$/.test(nowSymbol)) {
+        if(!/^[a-z0-9/]+$/.test(nowSymbol)) {
             return;
         }
         const symbolsConfig = getconfigSymbol();
@@ -81,6 +90,7 @@ async function addTrade(
         qp.dispose();
     });
 }
+
 async function delTrade(
     _textEditor: vscode.TextEditor,
     _edit: vscode.TextEditorEdit,
@@ -91,6 +101,7 @@ async function delTrade(
     await setconfigSymbol(symbolsConfig)
     btcMarkerBarViewProvider.refresh();
 }
+
 async function tradeDetail(
     _textEditor: vscode.TextEditor,
     _edit: vscode.TextEditorEdit,
@@ -107,10 +118,16 @@ async function tradeDetail(
     );
     const getBuffer = bent('buffer')
     let locale:string = JSON.parse(process.env.VSCODE_NLS_CONFIG || '{"locale":"en"}').locale;
-    const resp = await getBuffer(`https://www.${getApiHost()}/${locale}/exchange/`);
+    const resp = await getBuffer(`https://www.${
+        getApiHost()
+    }/${locale}/exchange/${
+        _args[0].label.symbol.replace('/','_')
+    }`);
+    // console.log(`https://www.${getApiHost()}/${locale}/exchange/${_args[0].label.symbol.replace('/','_')}`)
     panel.webview.html = resp.toString()
 }
-function refresh(
+
+async function refresh(
     _textEditor: vscode.TextEditor,
     _edit: vscode.TextEditorEdit,
     ..._args: any[]

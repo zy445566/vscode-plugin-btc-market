@@ -25,10 +25,14 @@ export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<Exchang
     const symbolList = vscode.workspace
     .getConfiguration()
     .get<Array<string>>('vscodePluginBtcMarket.symbol') || [];
-    // const symbolList = ['btcusdt']
+    // const symbolList = ['btc/usdt']
     const exchangeSymbolList:Array<ExchangeSymbol> = [];
     for(const symbol of symbolList) {
-        const resp = await getJSON(`https://api.${this.apiHost}/market/history/kline?period=1day&size=1&symbol=${symbol}`);
+        const resp = await getJSON(`https://api.${
+          this.apiHost
+        }/market/history/kline?period=1day&size=1&symbol=${
+          symbol.replace('/','')
+        }`);
         exchangeSymbolList.push(
             new ExchangeSymbol(symbol, resp.data[0],vscode.TreeItemCollapsibleState.None) //vscode.TreeItemCollapsibleState.Collapsed
         )

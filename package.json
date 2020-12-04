@@ -37,8 +37,8 @@
         "vscodePluginBtcMarket.symbol": {
           "type": "array",
           "default": [
-            "btcusdt",
-            "ethusdt"
+            "btc/usdt",
+            "eth/usdt"
           ],
           "description": "%extension.btc.market.blockCoinExchangeSymbol%"
         }

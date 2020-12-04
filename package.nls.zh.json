@@ -5,7 +5,7 @@
     "extension.btc.market.delTrade":"删除交易",
     "extension.btc.market.tradeDetail":"交易详情",
     "extension.btc.market.refresh":"刷新",
-    "extension.btc.market.blockCoinExchangeSymbol":"区块币交易标识,类似于(btcusdt,ethusdt...)",
+    "extension.btc.market.blockCoinExchangeSymbol":"区块币交易标识,类似于(btc/usdt,eth/usdt...)",
     "extension.btc.market.requestHost":"请求域名(默认: huobi.pr )",
     "extension.btc.market.autoRefreshTime":"自动刷新时间 (单位为秒)",
     "extension.btc.market.btcMarketConfig":"BTC行情配置"
