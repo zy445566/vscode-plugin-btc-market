@@ -50,7 +50,9 @@ async function addTrade(
     if(symbolsKeyList.length<1) {
         const getJSON = bent('json')
         const resp = await getJSON(`https://api.${getApiHost()}/v1/common/symbols`);
-        symbolsKeyList = resp.data.map((symbolInfo:SymbolInfo)=>{label:`${symbolInfo["base-currency"]}${symbolInfo["quote-currency"]}`})
+        symbolsKeyList = resp.data.map((symbolInfo:SymbolInfo)=> {
+            return {label:`${symbolInfo["base-currency"]}${symbolInfo["quote-currency"]}`};
+        })
     }
     const qp = vscode.window.createQuickPick();
     qp.items = [{ label: localize('extension.btc.market.inputBlockCoinExchangeSymbol') }];
@@ -66,6 +68,9 @@ async function addTrade(
     qp.show();
     qp.onDidAccept(async () => {
         if (!nowSymbol) {
+            return;
+        }
+        if(!/^[a-z0-9]+$/.test(nowSymbol)) {
             return;
         }
         const symbolsConfig = getconfigSymbol();
@@ -86,12 +91,24 @@ async function delTrade(
     await setconfigSymbol(symbolsConfig)
     btcMarkerBarViewProvider.refresh();
 }
-function tradeDetail(
+async function tradeDetail(
     _textEditor: vscode.TextEditor,
     _edit: vscode.TextEditorEdit,
     ..._args: any[]
 ) {
-    console.log('tradeDetail')
+    const panel = vscode.window.createWebviewPanel(
+        'myWebview', // viewType
+        _args[0].label, // 视图标题
+        vscode.ViewColumn.One, // 显示在编辑器的哪个部位
+        {
+            enableScripts: true, // 启用JS，默认禁用
+            retainContextWhenHidden: true, // webview被隐藏时保持状态，避免被重置
+        }
+    );
+    const getBuffer = bent('buffer')
+    let locale:string = JSON.parse(process.env.VSCODE_NLS_CONFIG || '{"locale":"en"}').locale;
+    const resp = await getBuffer(`https://www.${getApiHost()}/${locale}/exchange/`);
+    panel.webview.html = resp.toString()
 }
 function refresh(
     _textEditor: vscode.TextEditor,
