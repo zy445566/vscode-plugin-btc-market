@@ -8,6 +8,5 @@
     "extension.btc.market.blockCoinExchangeSymbol":"Block Coin Exchange Symbol,such as (btcusdt,ethusdt...)",
     "extension.btc.market.requestHost":"Request Host(default: huobi.pr )",
     "extension.btc.market.autoRefreshTime":"Auto Refresh Time (seconds)",
-    "extension.btc.market.btcMarketConfig":"BTCMarketConfig",
-    "extension.btc.market.inputBlockCoinExchangeSymbol":"input Block Coin Exchange Symbol,please.such as (btcusdt,ethusdt...)"
+    "extension.btc.market.btcMarketConfig":"BTCMarketConfig"
 }

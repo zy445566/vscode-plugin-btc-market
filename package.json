@@ -1,6 +1,6 @@
 {
   "name": "vscode-plugin-btc-market",
-  "displayName": "%extension.btc.market.displayName%",
+  "displayName": "BTC market",
   "description": "%extension.btc.market.description%",
   "version": "1.0.0",
   "publisher": "swimming",
@@ -14,7 +14,10 @@
   "main": "./out/extension.js",
   "activationEvents": [
     "onView:BtcMarkerBarView",
-    "onCommand:extension.btc.market.addTrade"
+    "onCommand:extension.btc.market.addTrade",
+    "onCommand:extension.btc.market.delTrade",
+    "onCommand:extension.btc.market.tradeDetail",
+    "onCommand:extension.btc.market.refresh"
   ],
   "contributes": {
     "configuration": {

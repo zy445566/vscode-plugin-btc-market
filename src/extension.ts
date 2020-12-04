@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { BtcMarkerBarViewProvider } from './btcMarkerBarViewProvider';
+import { localize } from './localize';
 import * as bent from 'bent';
 
 function getApiHost() {
@@ -52,7 +53,7 @@ async function addTrade(
         symbolsKeyList = resp.data.map((symbolInfo:SymbolInfo)=>{label:`${symbolInfo["base-currency"]}${symbolInfo["quote-currency"]}`})
     }
     const qp = vscode.window.createQuickPick();
-    qp.items = [{ label: '%extension.btc.market.inputBlockCoinExchangeSymbol%' }];
+    qp.items = [{ label: localize('extension.btc.market.inputBlockCoinExchangeSymbol') }];
     qp.onDidChangeValue((value) => {
         qp.busy = true;
         qp.items = symbolsKeyList.filter(symbolsKey=>symbolsKey.label.indexOf(value)>-1);
@@ -101,7 +102,7 @@ function refresh(
 }
 
 export function activate(context: vscode.ExtensionContext) {
-	vscode.window.registerTreeDataProvider('BtcMarkerBarView', btcMarkerBarViewProvider);
+    vscode.window.registerTreeDataProvider('BtcMarkerBarView', btcMarkerBarViewProvider);
     const textEditorCommandMap = [
         {
             command: 'extension.btc.market.addTrade',

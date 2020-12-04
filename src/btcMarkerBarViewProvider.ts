@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as bent from 'bent';
+import { localize } from './localize';
 
 export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<ExchangeSymbol> {
   constructor(private apiHost: string) {
@@ -48,7 +49,11 @@ class ExchangeSymbol extends vscode.TreeItem {
     public readonly collapsibleState: vscode.TreeItemCollapsibleState
   ) {
     super(label, collapsibleState);
-    this.tooltip = `${this.label} height:${priceData.high} low:${priceData.low}`;
+    this.tooltip = `${this.label} ${localize(
+      'extension.btc.market.high'
+      )}:${priceData.high} ${localize(
+        'extension.btc.market.low'
+        )}:${priceData.low}`;
     const rate = (((priceData.close-priceData.open)/priceData.open)*100);
     this.description = `${priceData.close} ${priceData.close>=priceData.open?'📈':'📉'} ${rate.toFixed(2)}%`;
   }
