@@ -2,7 +2,7 @@
   "name": "vscode-plugin-btc-market",
   "displayName": "BTC market",
   "description": "%extension.btc.market.description%",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "publisher": "swimming",
   "icon": "btc128.png",
   "engines": {
@@ -33,6 +33,16 @@
           "type": "number",
           "default": 10,
           "description": "%extension.btc.market.autoRefreshTime%"
+        },
+        "vscodePluginBtcMarket.riseColor": {
+          "type": "string",
+          "default": "green",
+          "description": "%extension.btc.market.riseColorConfig%"
+        },
+        "vscodePluginBtcMarket.fallColor": {
+          "type": "string",
+          "default": "red",
+          "description": "%extension.btc.market.fallColorConfig%"
         },
         "vscodePluginBtcMarket.symbol": {
           "type": "array",
@@ -106,6 +116,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "build": "npm run compile && npx vsce package",
     "vsce:publish": "npx vsce package && npx vsce publish"
   },
   "repository": {

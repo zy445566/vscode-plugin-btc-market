@@ -8,5 +8,7 @@
     "extension.btc.market.blockCoinExchangeSymbol":"Block Coin Exchange Symbol,such as (btc/usdt,eth/usdt...)",
     "extension.btc.market.requestHost":"Request Host(default: huobi.pr )",
     "extension.btc.market.autoRefreshTime":"Auto Refresh Time (seconds)",
-    "extension.btc.market.btcMarketConfig":"BTCMarketConfig"
+    "extension.btc.market.btcMarketConfig":"BTCMarketConfig",
+    "extension.btc.market.riseColorConfig":"The rising color supports # + 3 or 6 character hexadecimal,such as (green,#0F0,#00FF00)",
+    "extension.btc.market.fallColorConfig":"The falling color supports # + 3 or 6 character hexadecimal,such as (red,#F00,#FF0000)"
 }

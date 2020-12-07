@@ -5,37 +5,15 @@ import * as bent from 'bent';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as moment from 'moment';
+import * as configManage from './configManage';
 
-function getApiHost() {
-    return vscode.workspace
-    .getConfiguration()
-    .get<string>('vscodePluginBtcMarket.apiHost') || 'huobi.pr';
-}
 
-function getautoRefreshTime() {
-    return vscode.workspace
-    .getConfiguration()
-    .get<number>('vscodePluginBtcMarket.autoRefreshTime') || 10;
-}
 
-function getconfigSymbol() {
-    return vscode.workspace
-    .getConfiguration()
-    .get<Array<string>>('vscodePluginBtcMarket.symbol') || [];
-}
-
-async function setconfigSymbol(symbolsConfig:Array<string>) {
-    return await vscode.workspace.getConfiguration().update(
-        'vscodePluginBtcMarket.symbol',
-        symbolsConfig
-    );
-}
-
-let autoRefreshTime = getautoRefreshTime();
+let autoRefreshTime = configManage.getautoRefreshTime();
 
 function autoRefreshTimeFunction() {
     const setIntervalHandle = setInterval(()=>{
-        if(autoRefreshTime!==getautoRefreshTime()) {
+        if(autoRefreshTime!==configManage.getautoRefreshTime()) {
             clearInterval(setIntervalHandle)
             return autoRefreshTimeFunction()
         }
@@ -45,7 +23,7 @@ function autoRefreshTimeFunction() {
 
 autoRefreshTimeFunction();
 
-const btcMarkerBarViewProvider = new BtcMarkerBarViewProvider(getApiHost());
+const btcMarkerBarViewProvider = new BtcMarkerBarViewProvider(configManage.getApiHost());
 
 type SymbolInfo = {
     "base-currency":String,
@@ -63,7 +41,7 @@ async function addTrade(
         qp.busy = true;
         if(symbolsKeyList.length<1) {
             const getJSON = bent('json')
-            const resp = await getJSON(`https://api.${getApiHost()}/v1/common/symbols`);
+            const resp = await getJSON(`https://api.${configManage.getApiHost()}/v1/common/symbols`);
             symbolsKeyList = resp.data.map((symbolInfo:SymbolInfo)=> {
                 return {label:`${symbolInfo["base-currency"]}/${symbolInfo["quote-currency"]}`};
             })
@@ -83,14 +61,14 @@ async function addTrade(
         if(!/^[a-z0-9/]+$/.test(nowSymbol)) {
             return;
         }
-        const symbolsConfig = getconfigSymbol();
+        const symbolsConfig = configManage.getconfigSymbol();
         if(symbolsConfig.indexOf(nowSymbol)>-1) {
             return vscode.window.showInformationMessage(
                 localize("extension.btc.market.blockCoinExchangeSymbolIsExist")
             )
         }
         symbolsConfig.push(nowSymbol);
-        await setconfigSymbol(symbolsConfig)
+        await configManage.setconfigSymbol(symbolsConfig)
         btcMarkerBarViewProvider.refresh();
         qp.hide();
         qp.dispose();
@@ -100,9 +78,9 @@ async function addTrade(
 async function delTrade(
     ...args: any[]
 ) {
-    const symbolsConfig = getconfigSymbol();
+    const symbolsConfig = configManage.getconfigSymbol();
     symbolsConfig.splice(symbolsConfig.indexOf(args[0].label),1);
-    await setconfigSymbol(symbolsConfig)
+    await configManage.setconfigSymbol(symbolsConfig)
     btcMarkerBarViewProvider.refresh();
 }
 
@@ -128,7 +106,7 @@ async function tradeDetail(
     let klineHtml = fs.readFileSync(klineHtmlDiskPath).toString();
     const getJSON = bent('json');
     const resp = await getJSON(`https://api.${
-          getApiHost()
+        configManage.getApiHost()
         }/market/history/kline?period=1day&size=200&symbol=${
             args[0].label.replace('/','')
         }`);
@@ -147,6 +125,8 @@ async function tradeDetail(
     klineHtml = klineHtml.replace('"%LINE_DATA%"', JSON.stringify(lineData));
     klineHtml = klineHtml.replace('"%DATES%"', JSON.stringify(dates));
     klineHtml = klineHtml.replace('"%VOLUMES%"', JSON.stringify(volumes));
+    klineHtml = klineHtml.replace('%FALL_COLOR%', configManage.getFallColor());
+    klineHtml = klineHtml.replace('%RISE_COLOR%', configManage.getRiseColor());
     panel.webview.html = klineHtml;
 }
 
