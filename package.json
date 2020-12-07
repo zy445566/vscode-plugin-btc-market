@@ -2,7 +2,7 @@
   "name": "vscode-plugin-btc-market",
   "displayName": "BTC market",
   "description": "%extension.btc.market.description%",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "swimming",
   "icon": "btc128.png",
   "engines": {
@@ -93,20 +93,24 @@
       "view/title": [
         {
           "command": "extension.btc.market.addTrade",
+          "when": "view == BtcMarkerBarView",
           "group": "navigation"
         },
         {
           "command": "extension.btc.market.refresh",
+          "when": "view == BtcMarkerBarView",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
           "command": "extension.btc.market.tradeDetail",
+          "when": "view == BtcMarkerBarView",
           "group": "inline"
         },
         {
           "command": "extension.btc.market.delTrade",
+          "when": "view == BtcMarkerBarView",
           "group": "inline"
         }
       ]
