@@ -72,6 +72,7 @@ class ExchangeSymbol extends vscode.TreeItem {
     if(Date.now()<this.loadingTime) {
       return;
     }
+    this.loadingTime = Date.now()+configManage.getautoRefreshTime()*1000;
     const getJSON = bent('json')
     const resp = await getJSON(`https://api.${
         this.apiHost
