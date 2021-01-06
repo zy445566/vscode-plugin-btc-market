@@ -35,6 +35,7 @@ export function getFallColor() {
 export async function setconfigSymbol(symbolsConfig:Array<string>) {
     return await vscode.workspace.getConfiguration().update(
         'vscodePluginBtcMarket.symbol',
-        symbolsConfig
+        symbolsConfig,
+        vscode.ConfigurationTarget.Global
     );
 }
