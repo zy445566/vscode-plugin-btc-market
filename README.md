@@ -1,6 +1,9 @@
 # vscode-plugin-btc-market
 BTC market vscode plugins
 
+# screenshot 
+![screenshot](https://raw.githubusercontent.com/zy445566/zy445566.github.io/master/vscode-plugin-btc-market/use.png)
+
 # Setting Item
 |  name   | type  | default  |
 |  ----  | ----  | ----  |
