@@ -30,6 +30,13 @@
             return result;
         }
 
+        function calculateRate(data) {
+            var result = [];
+            for (var i = 0, len = data.length; i < len; i++) {
+                result.push((((data[i][0]-data[i][1])/data[i][1])*100).toFixed(2));
+            }
+            return result;
+        }
 
         var dates = "%DATES%";
         var data = "%LINE_DATA%";
@@ -40,6 +47,7 @@
         var dataMA20 = calculateMA(20, data);
         var dataMA30 = calculateMA(30, data);
         var dataMA120 = calculateMA(120, data);
+        var rateData = calculateRate(data);
 
 
         var option = {
@@ -159,6 +167,21 @@
                 axisLine: {show: false},
                 axisTick: {show: false},
                 splitLine: {show: false}
+            }, {
+                type: 'value',
+                name: 'Rate',
+                min: 'dataMin',
+                max: 'dataMax',
+                axisLabel: {
+                    formatter: '{value} %'
+                },
+                scale: true,
+                gridIndex: 1,
+                splitNumber: 2,
+                axisLabel: {show: false},
+                axisLine: {show: false},
+                axisTick: {show: false},
+                splitLine: {show: false}
             }],
             grid: [{
                 left: 20,
@@ -218,6 +241,17 @@
                     }
                 },
                 data: volumes
+            },{
+                name: 'Rate',
+                type: 'line',
+                xAxisIndex: 1,
+                yAxisIndex: 2,
+                data: rateData,
+                // smooth: true,
+                showSymbol: false,
+                lineStyle: {
+                    width: 1
+                },
             }, {
                 type: 'candlestick',
                 name: 'KLine',
