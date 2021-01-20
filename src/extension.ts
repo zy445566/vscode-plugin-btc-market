@@ -7,7 +7,32 @@ import * as path from 'path';
 import * as moment from 'moment';
 import * as configManage from './configManage';
 
-
+async function isHostOk() {
+    const apiHost  = configManage.getApiHost();
+    const getJSON = bent('json');
+    async function changeHost() {
+      const newHost = await vscode.window.showInputBox({
+        placeHolder:apiHost,
+        prompt:localize(
+            'extension.btc.market.huobiDomainInvalidInfo'
+        )
+    });
+    await configManage.setConfigApiHost(newHost || apiHost)
+    }
+    try{
+      const resp = await Promise.race([
+        getJSON(`https://api.${
+          apiHost
+        }/v1/common/timestamp`),
+        new Promise((resolve)=>setTimeout(resolve,3*1000))
+      ]);
+      if(!resp) {
+        await changeHost()
+      }
+    } catch(err) {
+      await changeHost()
+    }
+}
 
 let autoRefreshTime = configManage.getautoRefreshTime();
 
@@ -23,7 +48,7 @@ function autoRefreshTimeFunction() {
 
 autoRefreshTimeFunction();
 
-const btcMarkerBarViewProvider = new BtcMarkerBarViewProvider(configManage.getApiHost());
+const btcMarkerBarViewProvider = new BtcMarkerBarViewProvider();
 
 type SymbolInfo = {
     "base-currency":String,
@@ -68,7 +93,7 @@ async function addTrade(
             )
         }
         symbolsConfig.push(nowSymbol);
-        await configManage.setconfigSymbol(symbolsConfig)
+        await configManage.setConfigSymbol(symbolsConfig)
         btcMarkerBarViewProvider.refresh();
         qp.hide();
         qp.dispose();
@@ -80,7 +105,7 @@ async function delTrade(
 ) {
     const symbolsConfig = configManage.getconfigSymbol();
     symbolsConfig.splice(symbolsConfig.indexOf(args[0].label),1);
-    await configManage.setconfigSymbol(symbolsConfig)
+    await configManage.setConfigSymbol(symbolsConfig)
     btcMarkerBarViewProvider.refresh();
 }
 
@@ -162,6 +187,7 @@ export function activate(context: vscode.ExtensionContext) {
             return vscode.commands.registerCommand(command, callback);
         })
     );
+    isHostOk();
 }
 
 export function deactivate() {}

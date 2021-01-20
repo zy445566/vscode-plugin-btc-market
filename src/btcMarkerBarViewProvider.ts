@@ -5,9 +5,6 @@ import * as configManage from './configManage';
 
 const loadingMap = new Map<string,ExchangeSymbol>();
 export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<ExchangeSymbol> {
-  constructor(private apiHost: string) {
-    this.apiHost = apiHost;
-  }
   private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
   readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
   
@@ -30,9 +27,9 @@ export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<Exchang
       this.refresh()
     }
     for(const symbol of symbolList) {
-      let exchangeSymbol = new ExchangeSymbol(symbol, this.apiHost,vscode.TreeItemCollapsibleState.None) //vscode.TreeItemCollapsibleState.Collapsed
+      let exchangeSymbol = new ExchangeSymbol(symbol,vscode.TreeItemCollapsibleState.None) //vscode.TreeItemCollapsibleState.Collapsed
       if(loadingMap.has(symbol)) {
-        exchangeSymbol = loadingMap.get(symbol) || new ExchangeSymbol(symbol, this.apiHost,vscode.TreeItemCollapsibleState.None);
+        exchangeSymbol = loadingMap.get(symbol) || new ExchangeSymbol(symbol,vscode.TreeItemCollapsibleState.None);
       } 
       // 此处是故意不加await的
       exchangeSymbol.Loading(refreshFunc);
@@ -55,11 +52,9 @@ class ExchangeSymbol extends vscode.TreeItem {
   public loadingTime = 0;
   constructor(
     public readonly label: string,
-    public readonly apiHost: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState
   ) {
     super(label, collapsibleState);
-    this.apiHost = apiHost;
     this.tooltip = `${this.label} ${localize(
       'extension.btc.market.loading'
     )}`;
@@ -74,11 +69,12 @@ class ExchangeSymbol extends vscode.TreeItem {
     }
     this.loadingTime = Date.now()+configManage.getautoRefreshTime()*1000;
     const getJSON = bent('json')
+    const apiHost  = configManage.getApiHost();
     const resp = await getJSON(`https://api.${
-        this.apiHost
-      }/market/history/kline?period=1day&size=1&symbol=${
-        this.label.replace('/','')
-      }`);
+      apiHost
+    }/market/history/kline?period=1day&size=1&symbol=${
+      this.label.replace('/','')
+    }`);
     const priceData:PriceData = resp.data[0];
     this.tooltip = `${this.label} ${localize(
       'extension.btc.market.high'

@@ -5,6 +5,14 @@ export function getApiHost() {
     .get<string>('vscodePluginBtcMarket.apiHost') || 'huobi.pro';
 }
 
+export async function setConfigApiHost(newHost:string) {
+    return await vscode.workspace.getConfiguration().update(
+        'vscodePluginBtcMarket.apiHost',
+        newHost,
+        vscode.ConfigurationTarget.Global
+    );
+}
+
 export function getautoRefreshTime() {
     return vscode.workspace
     .getConfiguration()
@@ -32,7 +40,7 @@ export function getFallColor() {
 }
 
 
-export async function setconfigSymbol(symbolsConfig:Array<string>) {
+export async function setConfigSymbol(symbolsConfig:Array<string>) {
     return await vscode.workspace.getConfiguration().update(
         'vscodePluginBtcMarket.symbol',
         symbolsConfig,

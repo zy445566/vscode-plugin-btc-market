@@ -12,6 +12,9 @@ export function localize(key:string):string {
     en.set("extension.btc.market.high","high");
     en.set("extension.btc.market.low","low");
     en.set("extension.btc.market.loading","loading");
+    en.set("extension.btc.market.huobiDomainInvalidInfo",
+        "Huobi domain name is invalid, change domain name or switch network line,please."
+    );
     const zh = new Map<string,string>();
     messages.set('zh',zh);
     zh.set("extension.btc.market.inputBlockCoinExchangeSymbol",
@@ -20,5 +23,8 @@ export function localize(key:string):string {
     zh.set("extension.btc.market.low","低");
     zh.set("extension.btc.market.blockCoinExchangeSymbolIsExist","区块币交易标识已经存在");
     zh.set("extension.btc.market.loading","加载中");
+    zh.set("extension.btc.market.huobiDomainInvalidInfo",
+        "火币域名已失效, 请更换域名或切换网络线路"
+    );
     return messages.get(locale)?.get(key) || '';
   }
