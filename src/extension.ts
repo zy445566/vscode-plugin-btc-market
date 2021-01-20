@@ -13,7 +13,7 @@ async function isHostOk() {
     async function changeHost() {
       const newHost = await vscode.window.showInputBox({
         placeHolder:apiHost,
-        prompt:localize(
+        prompt:`<${apiHost}>`+localize(
             'extension.btc.market.huobiDomainInvalidInfo'
         )
     });
