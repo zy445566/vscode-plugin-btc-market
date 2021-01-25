@@ -140,7 +140,7 @@ async function tradeDetail(
     const dates = [];
     const nowData = moment();
     for(const data of resp.data) {
-        lineData.unshift([data.close,data.open,data.low,data.high])
+        lineData.unshift([data.open,data.close,data.low,data.high])
         dates.unshift(nowData.format('YYYY-MM-DD'));
         volumes.unshift(data.vol)
         nowData.subtract(1,'days');
