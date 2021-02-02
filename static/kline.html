@@ -33,7 +33,7 @@
         function calculateRate(data) {
             var result = [];
             for (var i = 0, len = data.length; i < len; i++) {
-                result.push((((data[i][0]-data[i][1])/data[i][1])*100).toFixed(2));
+                result.push((((data[i][1]-data[i][0])/data[i][0])*100).toFixed(2));
             }
             return result;
         }
