@@ -61,6 +61,11 @@ class ExchangeSymbol extends vscode.TreeItem {
     this.description = `${localize(
       'extension.btc.market.loading'
     )}`;
+    this.command = {
+      command: 'extension.btc.market.tradeDetail',
+      title: '',
+      arguments: [this]
+    };
   }
 
   async Loading(refreshFunc:Function) {

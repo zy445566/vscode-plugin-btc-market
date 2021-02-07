@@ -2,7 +2,7 @@
   "name": "vscode-plugin-btc-market",
   "displayName": "BTC market",
   "description": "%extension.btc.market.description%",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "publisher": "swimming",
   "icon": "btc128.png",
   "engines": {
@@ -106,7 +106,7 @@
         {
           "command": "extension.btc.market.tradeDetail",
           "when": "view == BtcMarkerBarView",
-          "group": "inline"
+          "group": "group"
         },
         {
           "command": "extension.btc.market.delTrade",
