@@ -7,17 +7,20 @@ import * as path from 'path';
 import * as moment from 'moment';
 import * as configManage from './configManage';
 
+let isAlreadyShowChangeHost = 0;
 async function isHostOk() {
     const apiHost  = configManage.getApiHost();
     const getJSON = bent('json');
     async function changeHost() {
-      const newHost = await vscode.window.showInputBox({
-        placeHolder:apiHost,
-        prompt:`<${apiHost}>`+localize(
-            'extension.btc.market.huobiDomainInvalidInfo'
-        )
-    });
-    await configManage.setConfigApiHost(newHost || apiHost)
+        if(isAlreadyShowChangeHost===1){return;}
+        isAlreadyShowChangeHost=1;
+        const newHost = await vscode.window.showInputBox({
+            placeHolder:apiHost,
+            prompt:`<${apiHost}>`+localize(
+                'extension.btc.market.huobiDomainInvalidInfo'
+            )
+        });
+        await configManage.setConfigApiHost(newHost || apiHost)
     }
     try{
       const resp = await Promise.race([
