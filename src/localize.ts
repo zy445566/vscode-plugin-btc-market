@@ -13,7 +13,7 @@ export function localize(key:string):string {
     en.set("extension.btc.market.low","low");
     en.set("extension.btc.market.loading","loading");
     en.set("extension.btc.market.huobiDomainInvalidInfo",
-        "Failed connection exists.The domain name maybe is invalid.If you cannot get real-time price, try to input domain name to change or switch network line,please."
+        "Failed connection exists.The domain name maybe is invalid.pull down the homepage of Huobi APP to get the valid domain.If you cannot get real-time price, try to input domain name to change or switch network line,please."
     );
     const zh = new Map<string,string>();
     messages.set('zh',zh);
@@ -24,7 +24,7 @@ export function localize(key:string):string {
     zh.set("extension.btc.market.blockCoinExchangeSymbolIsExist","区块币交易标识已经存在");
     zh.set("extension.btc.market.loading","加载中");
     zh.set("extension.btc.market.huobiDomainInvalidInfo",
-        "存在失败连接，可能域名已失效, 如无法获取实时价格请输入更换域名或切换网络线路"
+        "存在失败连接，可能域名已失效, 有效域名请下拉火币APP首页获取,如无法获取实时价格请输入更换域名或切换网络线路"
     );
     return messages.get(locale)?.get(key) || '';
   }
