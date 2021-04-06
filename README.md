@@ -9,7 +9,9 @@ BTC market vscode plugins
 |  ----  | ----  | ----  |
 | vscodePluginBtcMarket.apiHost  | string | huobi.li |
 | vscodePluginBtcMarket.symbol  | array | ["btc/usdt","eth/usdt"] |
-| vscodePluginBtcMarket.autoRefreshTime  | number | 10 (s)|
+| vscodePluginBtcMarket.autoRefreshTime  | number | 10 (s) |
+| vscodePluginBtcMarket.isShowStatusBar  | boolean | true |
+| vscodePluginBtcMarket.statusBarRefreshTime  | number | 1000 (ms) |
 
 # code repo
 https://github.com/zy445566/vscode-plugin-btc-market
