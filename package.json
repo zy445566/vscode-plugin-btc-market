@@ -2,7 +2,7 @@
   "name": "vscode-plugin-btc-market",
   "displayName": "BTC market",
   "description": "%extension.btc.market.description%",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "publisher": "swimming",
   "icon": "btc128.png",
   "engines": {
@@ -33,6 +33,16 @@
           "type": "number",
           "default": 10,
           "description": "%extension.btc.market.autoRefreshTime%"
+        },
+        "vscodePluginBtcMarket.isShowStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "%extension.btc.market.isShowStatusBar%"
+        },
+        "vscodePluginBtcMarket.statusBarRefreshTime": {
+          "type": "number",
+          "default": 1000,
+          "description": "%extension.btc.market.statusBarRefreshTime%"
         },
         "vscodePluginBtcMarket.riseColor": {
           "type": "string",

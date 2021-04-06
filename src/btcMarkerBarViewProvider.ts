@@ -7,7 +7,24 @@ const loadingMap = new Map<string,ExchangeSymbol>();
 export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<ExchangeSymbol> {
   private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
   readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
-  
+  public statusBar:vscode.StatusBarItem;
+  public statusBaTextList:Array<string>;
+  constructor() {
+    this.statusBaTextList = [];
+    this.statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+    setInterval(()=>{
+      if(this.statusBaTextList.length>10) {
+        this.statusBar.text = this.statusBaTextList.shift() || '';
+      } else {
+        this.statusBar.text = this.statusBaTextList[Math.floor(Math.random()*this.statusBaTextList.length)];
+      }
+      if(configManage.isShowStatusBar()) {
+        this.statusBar.show();
+      } else {
+        this.statusBar.hide();
+      }
+    },configManage.getStatusBarRefreshTime())
+  }
   public refresh(): any {
     this._onDidChangeTreeData.fire(undefined);
   }
@@ -33,11 +50,14 @@ export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<Exchang
       } 
       // 此处是故意不加await的
       exchangeSymbol.Loading(refreshFunc);
-      exchangeSymbolList.push(exchangeSymbol)
+      exchangeSymbolList.push(exchangeSymbol);
     }
     loadingMap.clear();
     for(const exchangeSymbol of exchangeSymbolList) {
-      loadingMap.set(exchangeSymbol.label,exchangeSymbol)
+      loadingMap.set(exchangeSymbol.label,exchangeSymbol);
+      if(this.statusBaTextList.length<100) {
+        this.statusBaTextList.push(`BTC Market:${exchangeSymbol.label} ${exchangeSymbol.description}`)
+      }
     }
     return exchangeSymbolList;
   }

@@ -39,6 +39,18 @@ export function getFallColor() {
     .get<string>('vscodePluginBtcMarket.fallColor') || 'red';
 }
 
+export function isShowStatusBar() {
+    return vscode.workspace
+    .getConfiguration()
+    .get<boolean>('vscodePluginBtcMarket.isShowStatusBar');
+}
+
+export function getStatusBarRefreshTime() {
+    return vscode.workspace
+    .getConfiguration()
+    .get<number>('vscodePluginBtcMarket.statusBarRefreshTime') || 1000;
+}
+
 
 export async function setConfigSymbol(symbolsConfig:Array<string>) {
     return await vscode.workspace.getConfiguration().update(
