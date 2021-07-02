@@ -8,16 +8,25 @@ export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<Exchang
   private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
   readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
   public statusBar:vscode.StatusBarItem;
-  public statusBaTextList:Array<string>;
+  public statusBarTextList:Array<string>;
   constructor() {
-    this.statusBaTextList = [];
+    this.statusBarTextList = [];
     this.statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     setInterval(()=>{
-      if(this.statusBaTextList.length>10) {
-        this.statusBar.text = this.statusBaTextList.shift() || '';
-      } else {
-        this.statusBar.text = this.statusBaTextList[Math.floor(Math.random()*this.statusBaTextList.length)];
+      const statusBarRefreshNumber = configManage.getStatusBarRefreshNumber();
+      const tradeTextList = []
+      for(let i=0;i<statusBarRefreshNumber;i++) {
+        if(this.statusBarTextList.length>10) {
+          tradeTextList.push(this.statusBarTextList.shift() || '');
+        } else {
+          tradeTextList.push(
+            this.statusBarTextList[
+              Math.floor(Math.random()*this.statusBarTextList.length)
+            ]
+          );
+        }
       }
+      this.statusBar.text = 'BTC Market:'+tradeTextList.join()
       if(configManage.isShowStatusBar()) {
         this.statusBar.show();
       } else {
@@ -55,8 +64,8 @@ export class BtcMarkerBarViewProvider implements vscode.TreeDataProvider<Exchang
     loadingMap.clear();
     for(const exchangeSymbol of exchangeSymbolList) {
       loadingMap.set(exchangeSymbol.label,exchangeSymbol);
-      if(this.statusBaTextList.length<100) {
-        this.statusBaTextList.push(`BTC Market:${exchangeSymbol.label} ${exchangeSymbol.description}`)
+      if(this.statusBarTextList.length<100) {
+        this.statusBarTextList.push(`${exchangeSymbol.label} ${exchangeSymbol.description}`)
       }
     }
     return exchangeSymbolList;

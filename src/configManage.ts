@@ -51,6 +51,12 @@ export function getStatusBarRefreshTime() {
     .get<number>('vscodePluginBtcMarket.statusBarRefreshTime') || 1000;
 }
 
+export function getStatusBarRefreshNumber() {
+    return vscode.workspace
+    .getConfiguration()
+    .get<number>('vscodePluginBtcMarket.statusBarRefreshNumber') || 3;
+}
+
 
 export async function setConfigSymbol(symbolsConfig:Array<string>) {
     return await vscode.workspace.getConfiguration().update(

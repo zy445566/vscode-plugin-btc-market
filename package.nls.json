@@ -10,6 +10,7 @@
     "extension.btc.market.autoRefreshTime":"Auto Refresh Time (seconds)",
     "extension.btc.market.isShowStatusBar":"Show Trade In Status Bar?",
     "extension.btc.market.statusBarRefreshTime":"Status Bar Refresh Time (ms) Restart To Effective",
+    "extension.btc.market.statusBarRefreshNumber":"Status Bar Refresh Trade Number",
     "extension.btc.market.btcMarketConfig":"BTCMarketConfig",
     "extension.btc.market.riseColorConfig":"The rising color supports # + 3 or 6 character hexadecimal,such as (green,#0F0,#00FF00)",
     "extension.btc.market.fallColorConfig":"The falling color supports # + 3 or 6 character hexadecimal,such as (red,#F00,#FF0000)"
