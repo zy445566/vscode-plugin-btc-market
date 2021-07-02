@@ -2,7 +2,7 @@
   "name": "vscode-plugin-btc-market",
   "displayName": "BTC market",
   "description": "%extension.btc.market.description%",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "publisher": "swimming",
   "icon": "btc128.png",
   "engines": {

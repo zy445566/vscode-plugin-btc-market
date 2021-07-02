@@ -12,6 +12,7 @@ BTC market vscode plugins
 | vscodePluginBtcMarket.autoRefreshTime  | number | 10 (s) |
 | vscodePluginBtcMarket.isShowStatusBar  | boolean | true |
 | vscodePluginBtcMarket.statusBarRefreshTime  | number | 1000 (ms) |
+| vscodePluginBtcMarket.statusBarRefreshNumber | number | 3 |
 
 # code repo
 https://github.com/zy445566/vscode-plugin-btc-market
