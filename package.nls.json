@@ -6,7 +6,7 @@
     "extension.btc.market.tradeDetail":"tradeDetail",
     "extension.btc.market.refresh":"refresh",
     "extension.btc.market.blockCoinExchangeSymbol":"Block Coin Exchange Symbol,such as (btc/usdt,eth/usdt...)",
-    "extension.btc.market.requestHost":"Request Host(default: huobi.af )",
+    "extension.btc.market.requestHost":"Request Host(default: huobi.ae )",
     "extension.btc.market.autoRefreshTime":"Auto Refresh Time (seconds)",
     "extension.btc.market.isShowStatusBar":"Show Trade In Status Bar?",
     "extension.btc.market.statusBarRefreshTime":"Status Bar Refresh Time (ms) Restart To Effective",
