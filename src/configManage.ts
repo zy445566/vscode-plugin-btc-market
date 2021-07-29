@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 export function getApiHost() {
     return vscode.workspace
     .getConfiguration()
-    .get<string>('vscodePluginBtcMarket.apiHost') || 'huobi.ae';
+    .get<string>('vscodePluginBtcMarket.apiHost') || 'huobi.bo';
 }
 
 export async function setConfigApiHost(newHost:string) {
